@@ -1,21 +1,18 @@
 package com.basics.basics.config;
 
+import com.basics.basics.entities.enums.Permissions;
+import com.basics.basics.entities.enums.Roles;
 import com.basics.basics.filters.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -25,20 +22,29 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private static final String[] publicRoutes = {"/error", "/auth/**", "/home.html"};
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/posts", "/auth/**").permitAll()
-//                        .requestMatchers("/posts/**").hasAnyRole("ADMIN")
-                        .anyRequest().authenticated())
-                .csrf(csrfToken -> csrfToken.disable())
-                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(Customizer.withDefaults());
+        httpSecurity.authorizeHttpRequests(request -> request
+                .requestMatchers(publicRoutes).permitAll()
+                .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyRole(Roles.ADMIN.name(), Roles.CREATOR.name())
+                .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyAuthority(Permissions.POST_CREATE.name())
+                .requestMatchers(HttpMethod.GET, "/posts/**").hasAnyAuthority(Permissions.POST_VIEW.name())
+                .requestMatchers(HttpMethod.PUT, "/posts/**").hasAuthority(Permissions.POST_UPDATE.name())
+                .requestMatchers(HttpMethod.DELETE,"/posts/**").hasAuthority(Permissions.POST_DELETE.name())
+                .anyRequest().authenticated()
+        );
 
+        httpSecurity.csrf(csrfToken -> csrfToken.disable());
+
+        httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        httpSecurity.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        httpSecurity.formLogin(Customizer.withDefaults());
 
         return httpSecurity.build();
     }

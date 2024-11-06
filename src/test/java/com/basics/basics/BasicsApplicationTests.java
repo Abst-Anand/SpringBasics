@@ -1,10 +1,13 @@
 package com.basics.basics;
 
 import com.basics.basics.entities.User;
+import com.basics.basics.entities.enums.Roles;
 import com.basics.basics.services.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Set;
 
 @SpringBootTest
 class BasicsApplicationTests {
@@ -18,7 +21,7 @@ class BasicsApplicationTests {
 
 	@Test
 	void testJwtService() {
-		User user = new User(4L, "anand@gmail.com", "12345","simp");
+		User user = new User();
 
 		String token = jwtService.generateAccessToken(user);
 

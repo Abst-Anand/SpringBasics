@@ -48,6 +48,8 @@ public class UserService implements UserDetailsService {
         toCreate.setEmail(signUpDto.getEmail());
         toCreate.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         toCreate.setName(signUpDto.getName());
+        toCreate.setRoles(signUpDto.getRoles());
+        toCreate.setPermissions(signUpDto.getPermissions());
 
         User savedUser = userRepository.save(toCreate);
 
