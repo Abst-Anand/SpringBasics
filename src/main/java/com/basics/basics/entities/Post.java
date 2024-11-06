@@ -19,6 +19,10 @@ public class Post extends AuditableEntity{
 
     private String title;
 
+    private String content;
+
+    @ManyToOne
+    private User author;
 
 
     public Post() {
@@ -28,6 +32,22 @@ public class Post extends AuditableEntity{
     public Post(String title) {
         super();
         this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public int getPostId() {

@@ -9,6 +9,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -39,6 +41,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleJwtException(JwtException expection) {
         ApiError apiError = new ApiError(expection.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         ResponseEntity<ApiError> response = new ResponseEntity<>(apiError, HttpStatus.NOT_ACCEPTABLE);
+        return response;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDeniedException(AccessDeniedException expection) {
+        ApiError apiError = new ApiError(expection.getMessage(), HttpStatus.FORBIDDEN);
+        ResponseEntity<ApiError> response = new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
         return response;
     }
 }

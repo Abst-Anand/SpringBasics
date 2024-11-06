@@ -30,6 +30,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post post) {
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        post.setAuthor(user);
+
         return postRepository.save(post);
     }
 
