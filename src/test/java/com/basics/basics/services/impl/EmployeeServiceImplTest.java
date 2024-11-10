@@ -122,8 +122,79 @@ class EmployeeServiceImplTest {
         // given
         when(employeeRepository.findByEmail(anyString())).thenReturn(List.of(mockEmployee));
 
-        // assert
+        // act and assert
         assertThrows(RuntimeException.class, () -> employeeService.createEmployee(mockEmployeeDto));
+    }
+
+    @Test
+    void testUpdateEmployee_whenEmployeeExistsAndNotUpdatingEmail_thenReturnUpdatedEmployee(){
+        // assign
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.of(mockEmployee));
+
+        mockEmployeeDto.setEmployeeName("New Name");
+        mockEmployeeDto.setSalary(50L);
+
+        Employee temp = modelMapper.map(mockEmployeeDto, Employee.class);
+        when(employeeRepository.save(any())).thenReturn(temp);
+
+
+        // act
+        EmployeeDto updatedEmployee = employeeService.updateEmployee(mockEmployeeDto);
+
+        // assert
+        assertThat(updatedEmployee).isNotNull();
+        assertThat(updatedEmployee.getEmail()).isEqualTo(mockEmployeeDto.getEmail());
+        assertThat(updatedEmployee).isNotEqualTo(mockEmployee);
+    }
+
+    @Test
+    void testUpdateEmployee_whenEmployeeExistsButUpdatesEmail_thenThrowRuntimeException(){
+        // assign
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.of(mockEmployee));
+
+        mockEmployeeDto.setEmail("changedEmail@gmail.com");
+        mockEmployeeDto.setEmployeeName("New Name");
+
+        // act and assert
+        assertThatThrownBy(()->employeeService.updateEmployee(mockEmployeeDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("The email of the employees cannot be updated");
+    }
+
+    @Test
+    void testUpdateEmployee_whenEmployeeDoesNotExists_thenThrowRuntimeException(){
+        // assign
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // act and assert
+        assertThatThrownBy(()->employeeService.updateEmployee(mockEmployeeDto))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Employee with id: " + mockEmployeeDto.getEmployeeId() +" not found");
+    }
+
+    @Test
+    void testDeleteEmployee_whenEmployeeExists_thenDeleteEmployee(){
+        // assign
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.of(mockEmployee));
+
+        // act
+        employeeService.deleteEmployee(mockEmployee.getEmployeeId());
+
+
+        // assert
+        verify(employeeRepository, times(1)).delete(mockEmployee);
+        verify(employeeRepository).delete(mockEmployee);
+    }
+
+    @Test
+    void testDeleteEmployee_whenEmployeeDoesNotExists_thenThrowRuntimeException(){
+        // assign
+        when(employeeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // act and assert
+        assertThatThrownBy(()-> employeeService.deleteEmployee(mockEmployee.getEmployeeId()))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Employee with id: " + mockEmployee.getEmployeeId() + " not found");
     }
 
 }

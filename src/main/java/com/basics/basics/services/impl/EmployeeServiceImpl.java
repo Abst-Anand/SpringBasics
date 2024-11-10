@@ -52,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if(!employee.getEmail().equals(employeeDto.getEmail())){
             log.error("Attempted to update email for employee with id: {}", employeeDto.getEmployeeId());
-            throw new RuntimeException("The email of the employees cannot be updates");
+            throw new RuntimeException("The email of the employees cannot be updated");
         }
         Employee updatedEmployee = modelMapper.map(employeeDto, Employee.class);
         employee = employeeRepository.save(updatedEmployee);
