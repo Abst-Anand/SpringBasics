@@ -1,12 +1,11 @@
-package com.basics.basics.services;
+package com.basics.basics.services.impl;
 
 import com.basics.basics.entities.Post;
 import com.basics.basics.entities.User;
 import com.basics.basics.exceptions.ResourceNotFoundException;
-import com.basics.basics.exceptions.TestException;
 import com.basics.basics.repositories.PostRepository;
+import com.basics.basics.services.PostService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

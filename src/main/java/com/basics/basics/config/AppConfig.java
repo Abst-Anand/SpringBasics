@@ -7,6 +7,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.modelmapper.ModelMapper;
 
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "getAuditorAwareImpl") //aware our jpa with the auditor
@@ -20,6 +21,11 @@ public class AppConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }

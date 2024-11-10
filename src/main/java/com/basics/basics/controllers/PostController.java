@@ -1,10 +1,9 @@
 package com.basics.basics.controllers;
 
 import com.basics.basics.entities.Post;
-import com.basics.basics.entities.enums.Roles;
 import com.basics.basics.repositories.PostRepository;
 import com.basics.basics.services.PostService;
-import com.basics.basics.services.PostServiceImpl;
+import com.basics.basics.services.impl.PostServiceImpl;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
