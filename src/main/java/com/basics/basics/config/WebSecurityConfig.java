@@ -31,6 +31,7 @@ public class WebSecurityConfig {
 
         httpSecurity.authorizeHttpRequests(request -> request
                 .requestMatchers(publicRoutes).permitAll()
+                .requestMatchers("/employees/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyRole(Roles.ADMIN.name(), Roles.CREATOR.name())
                 .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyAuthority(Permissions.POST_CREATE.name())

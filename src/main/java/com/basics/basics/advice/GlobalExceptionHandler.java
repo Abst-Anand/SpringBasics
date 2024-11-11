@@ -23,6 +23,13 @@ public class GlobalExceptionHandler {
         return response;
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiError> handleRuntimeException(RuntimeException expection) {
+        ApiError apiError = new ApiError(expection.getMessage(), HttpStatus.NOT_FOUND);
+        ResponseEntity<ApiError> response = new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        return response;
+    }
+
     @ExceptionHandler(TestException.class)
     public ResponseEntity<ApiError> handleTestException(TestException expection) {
         ApiError apiError = new ApiError(expection.getMessage(), HttpStatus.BAD_REQUEST);
