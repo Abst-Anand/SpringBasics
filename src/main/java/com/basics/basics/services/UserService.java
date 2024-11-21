@@ -6,6 +6,7 @@ import com.basics.basics.dto.UserDto;
 import com.basics.basics.entities.User;
 import com.basics.basics.exceptions.ResourceNotFoundException;
 import com.basics.basics.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -8,6 +8,9 @@ import com.basics.basics.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,7 +21,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
 
+    private final String CACHE_NAME = "employee";
+
     @Override
+    @Cacheable(cacheNames = CACHE_NAME, key = "#id") // key = "{#id, #otherParam}
     public EmployeeDto getEmployeeById(long id) {
         log.info("Fetching employee by id: {}", id);
         Employee employee = employeeRepository.findById(id).orElseThrow(()->{
@@ -43,6 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @CachePut(cacheNames = CACHE_NAME, key = "#employeeDto.getEmployeeId()")
     public EmployeeDto updateEmployee(EmployeeDto employeeDto) {
         log.info("Updating employee with id: {}", employeeDto.getEmployeeId());
         Employee employee = employeeRepository.findById(employeeDto.getEmployeeId()).orElseThrow(()->{
@@ -61,6 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @CacheEvict(cacheNames = CACHE_NAME, key = "#id")
     public void deleteEmployee(long id) {
         log.info("Deleting employee with id: {}", id);
 

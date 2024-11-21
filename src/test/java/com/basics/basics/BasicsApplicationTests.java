@@ -12,27 +12,5 @@ import java.util.Set;
 @SpringBootTest
 class BasicsApplicationTests {
 
-	@Autowired
-	private JwtService jwtService;
-
-	@Test
-	void contextLoads() {
-	}
-
-	@Test
-	void testJwtService() {
-		User user = new User();
-
-		String token = jwtService.generateAccessToken(user);
-
-		System.out.println(token);
-
-		// tempered token
-//		Long userId = jwtService.getUserIdFromToken("eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI0IiwiZW1haWwiOiJhbmFuZEBnbWFpbC5jb20iLCJyb2xlcyI6WyJVU0VSIiwiQURNSU4iXSwiaWF0IjoxNzI5Nzc1MzA0LCJleHAiOjE3Mjk3NzUzNjR9.kjbsdfjbsiknakfkaek");
-		Long userId = jwtService.getUserIdFromToken(token);
-
-		System.out.println(userId);
-
-	}
 
 }

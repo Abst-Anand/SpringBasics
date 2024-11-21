@@ -52,7 +52,6 @@ class EmployeeServiceImplTest {
         mockEmployee = new Employee(1L, "Anand", "anand56@gmail.com",100L);
 
         mockEmployeeDto = modelMapper.map(mockEmployee, EmployeeDto.class);
-
     }
 
 

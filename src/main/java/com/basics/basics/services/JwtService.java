@@ -1,6 +1,8 @@
 package com.basics.basics.services;
 
 import com.basics.basics.entities.User;
+import com.basics.basics.entities.enums.Permissions;
+import com.basics.basics.entities.enums.Roles;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -22,6 +24,7 @@ public class JwtService {
     }
 
     public String generateAccessToken(User user) {
+
 
         String token =  Jwts.builder()
                 .subject(user.getUserId().toString())
